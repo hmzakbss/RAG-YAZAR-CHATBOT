@@ -7,8 +7,6 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer
 from groq import Groq
 from dotenv import load_dotenv
-import requests
-import zipfile
 
 # -------------------------
 # .env ve API Key
@@ -25,36 +23,18 @@ CSV_FILE = "stories.csv"
 CHUNK_SIZE = 300
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 TOP_K = 3
-INDEX_PATH = "faiss_index.bin"
-META_PATH = "index_meta.pkl"
 
 # -------------------------
-# Google Drive’dan veri indir (deploy için)
+# Embedding modeli (CPU zorlanıyor)
 # -------------------------
-DATA_URL = "https://drive.google.com/uc?export=download&id=1zMkeE5bU3UBH97dwjtsH-XQl0EtbNYwg"  # senin Drive linki
-DATA_ZIP = "data.zip"
-
-if not os.path.exists(DATA_FOLDER):
-    print("📥 Veriler indiriliyor...")
-    r = requests.get(DATA_URL)
-    with open(DATA_ZIP, "wb") as f:
-        f.write(r.content)
-    print("✅ Zip indirildi, açılıyor...")
-    with zipfile.ZipFile(DATA_ZIP, "r") as zip_ref:
-        zip_ref.extractall(DATA_FOLDER)
-    os.remove(DATA_ZIP)
-    print("✅ Data klasörü oluşturuldu.")
-else:
-    print("✅ Data klasörü zaten mevcut.")
-
-# -------------------------
-# Embedding modeli
-# -------------------------
-embed_model = SentenceTransformer(EMBEDDING_MODEL)
+embed_model = SentenceTransformer(EMBEDDING_MODEL, device='cpu')
 
 # -------------------------
 # FAISS index ve meta yükle veya oluştur
 # -------------------------
+INDEX_PATH = "faiss_index.bin"
+META_PATH = "index_meta.pkl"
+
 if os.path.exists(INDEX_PATH) and os.path.exists(META_PATH):
     index = faiss.read_index(INDEX_PATH)
     with open(META_PATH, "rb") as f:
@@ -78,23 +58,21 @@ else:
     texts = txt_chunks + csv_chunks
     print(f"Toplam chunk sayısı: {len(texts)}")
 
-    if len(texts) > 0:
-        vectors = embed_model.encode(texts, convert_to_numpy=True)
-        index = faiss.IndexFlatL2(vectors.shape[1])
-        index.add(vectors.astype(np.float32))
-        faiss.write_index(index, INDEX_PATH)
-        with open(META_PATH, "wb") as f:
-            pickle.dump({"texts": texts}, f)
-    else:
-        print("⚠️ Uyarı: Chunk bulunamadı, FAISS index oluşturulmadı.")
-        index = None
+    if len(texts) == 0:
+        raise ValueError("texts listesi boş, embedding veya veri eksik.")
+
+    vectors = embed_model.encode(texts, convert_to_numpy=True)
+    index = faiss.IndexFlatL2(vectors.shape[1])
+    index.add(vectors.astype(np.float32))
+
+    faiss.write_index(index, INDEX_PATH)
+    with open(META_PATH, "wb") as f:
+        pickle.dump({"texts": texts}, f)
 
 # -------------------------
 # RAG bağlam bulma
 # -------------------------
 def retrieve_context(query, top_k=TOP_K):
-    if index is None or len(texts) == 0:
-        return ""
     query_vec = embed_model.encode([query], convert_to_numpy=True)
     D, I = index.search(query_vec.astype(np.float32), top_k)
     results = [texts[i] for i in I[0]]
@@ -138,6 +116,7 @@ h1,h2,h3,h4,h5,h6 { font-family: 'Georgia', serif; }
 </style>
 """, unsafe_allow_html=True)
 
+# Sidebar
 st.sidebar.title("📖 Yazar Asistanı 🤖")
 st.sidebar.markdown("""
 Bu chatbot, veri setlerinden bağlam alarak yaratıcı metinler üretir.
@@ -147,31 +126,35 @@ Bu chatbot, veri setlerinden bağlam alarak yaratıcı metinler üretir.
 🔹 Üretilen metin altta görünecek
 """)
 
+# Başlık ve açıklama
 st.title("🖋️ Yaratıcı Yazar Asistanı")
 st.markdown("Ana fikrinizi veya kısa özetinizi girin, chatbot sizin için **yaratıcı bir metin** üretsin.")
 
+# Giriş kutusu
 query = st.text_area(
     "Ana fikir veya sorunuz:",
     placeholder="Örnek: Kahramanımız gizemli bir ormanda kayboluyor...",
     height=120
 )
 
+# Gönder butonu ve cevap
 answer = None
 if st.button("Gönder") and query:
     with st.spinner("Metin üretiliyor..."):
         answer = ask_groq_rag(query)
     st.markdown("**Üretilen Metin:**")
-    st.markdown(
-        f"""<div style="
-            background-color:#fff8dc;
-            color:#000000;
-            padding:15px;
-            border-radius:10px;
-            line-height:1.5;
-        ">{answer}</div>""",
-        unsafe_allow_html=True
-    )
+    st.markdown(f"""
+    <div style="
+        background-color:#fff8dc;
+        color:#000000;
+        padding:15px;
+        border-radius:10px;
+        line-height:1.5;
+    ">
+        {answer}
+    </div>""", unsafe_allow_html=True)
 
+# Sohbet geçmişi
 if 'history' not in st.session_state:
     st.session_state['history'] = []
 
@@ -183,13 +166,13 @@ if st.session_state['history']:
     st.markdown("### 💬 Sohbet Geçmişi (Son 5)")
     for h in reversed(st.session_state['history'][-5:]):
         st.markdown(f"**Soru:** {h['query']}")
-        st.markdown(
-            f"""<div style="
-                background-color:#f5f5dc;
-                color:#000000;
-                padding:10px;
-                border-radius:8px;
-                line-height:1.5;
-            ">{h['answer']}</div>""",
-            unsafe_allow_html=True
-        )
+        st.markdown(f"""
+        <div style="
+            background-color:#f5f5dc;
+            color:#000000;
+            padding:10px;
+            border-radius:8px;
+            line-height:1.5;
+        ">
+            {h['answer']}
+        </div>""", unsafe_allow_html=True)
