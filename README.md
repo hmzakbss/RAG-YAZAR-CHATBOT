@@ -1,10 +1,10 @@
-#🧠 RAG Yazar Chatbot
+🧠 RAG Yazar Chatbot
 Yazarlar için Akıllı Metin Üretim ve Bilgi Destek Chatbotu
 Bu proje, Retrieval-Augmented Generation (RAG) mimarisi kullanarak geliştirilen, Groq destekli bir yazar asistanı chatbotudur.
 Chatbot, hem genel bilgi verilerini hem de yazarlıkla ilgili özel veri setlerini kullanarak, bağlama dayalı yaratıcı ve mantıklı metinler üretir.
 Özellikle roman, hikâye veya senaryo yazarlarının fikir geliştirme süreçlerinde destek sağlamayı amaçlar.
 
-#🎯 Projenin Amacı
+🎯 Projenin Amacı
 
 Bu proje, yazarlara, içerik üreticilerine ve genel bilgi odaklı kullanıcılara yönelik bir Yapay Zekâ destekli sohbet sistemi geliştirmeyi amaçlamaktadır.
 Chatbot, yalnızca genel bilgiyle değil, aynı zamanda özel olarak hazırlanmış yazarlık temalı veri setlerinden beslendiği için kullanıcılara bağlamsal olarak doğru, anlamlı ve özgün yanıtlar sunar.
@@ -123,6 +123,7 @@ Hamza Akbaş
 🎓 Sakarya Üniversitesi — Bilişim Sistemleri Mühendisliği
 İclal Aydın
 🎓Çukurova Üniversitesi - Matematik
+
 
 
 
