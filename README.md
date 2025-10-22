@@ -26,23 +26,6 @@ Yazar odaklı özel eğitim verileri (hikaye taslağı, ana fikir, karakter geli
 | **Dil**                    | Python 3.10+                             |
 
 
-📂 Proje Yapısı
-rag-writer-chatbot/
-│
-├── data/
-│   ├── dataset.txt          # Metin tabanlı veri
-│   ├── stories.csv          # CSV tabanlı hikaye verisi
-│
-├── src/
-│   ├── chat.py              # Ana uygulama (Streamlit arayüz + Groq bağlantısı)
-│   ├── index_data.py        # FAISS index oluşturma betiği
-│   ├── utils.py             # Yardımcı fonksiyonlar
-│
-├── requirements.txt         # Gerekli kütüphaneler
-├── .gitignore               # Gizli dosya koruması
-└── README.md                # Proje dokümantasyonu
-
-
 ⚙️ Kurulum
 1️⃣ Sanal ortam oluştur
 python -m venv .venv
@@ -80,3 +63,4 @@ Hamza Akbaş
 🎓 Sakarya Üniversitesi — Bilişim Sistemleri Mühendisliği
 İclal Aydın
 🎓Çukurova Üniversitesi - Matematik
+
