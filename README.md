@@ -1,3 +1,6 @@
+Streamlit Deploy Linki : 
+https://rag-yazar-chatbot.streamlit.app/
+
 🧠 RAG Yazar Chatbot
 Yazarlar için Akıllı Metin Üretim ve Bilgi Destek Chatbotu
 Bu proje, Retrieval-Augmented Generation (RAG) mimarisi kullanarak geliştirilen, Groq destekli bir yazar asistanı chatbotudur.
@@ -124,6 +127,7 @@ Hamza Akbaş
 🎓 Sakarya Üniversitesi — Bilişim Sistemleri Mühendisliği
 İclal Aydın
 🎓Çukurova Üniversitesi - Matematik
+
 
 
 
