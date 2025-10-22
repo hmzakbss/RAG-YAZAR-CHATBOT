@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+*.venv/
+.env
+.venv/
+
+# FAISS index ve meta
+faiss_index.bin
+index_meta.pkl
+
+# Data klasörü (istersen txt/csv hariç bırakabilirsin)
+data/
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# Mac OS
+.DS_Store
+
+# Sanal ortam
+venv/
+
+# Çevre değişkenleri (API anahtarları vb. içerir)
+.env
+
+# Oluşturulan indeks dosyaları
+faiss_index.bin
+index_meta.pkl
+
+# Python cache dosyaları
+__pycache__/
+*.pyc
