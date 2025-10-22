@@ -78,6 +78,7 @@ Eğer açılmazsa terminaldeki localhost linkine tıklayabilirsiniz.
 🌐 Web Arayüzü & Ürün Kılavuzu
 Deploy işlemi tamamlandıktan sonra proje bu linkten erişilebilir olacaktır:
 👉 🔗 Chatbot’u Deneyin
+<img width="1919" height="865" alt="image" src="https://github.com/user-attachments/assets/b44a3ed5-4cb8-46ab-b592-fed703a0a3d6" />
 
 
  💬 Kullanım Akışı
@@ -123,6 +124,7 @@ Hamza Akbaş
 🎓 Sakarya Üniversitesi — Bilişim Sistemleri Mühendisliği
 İclal Aydın
 🎓Çukurova Üniversitesi - Matematik
+
 
 
 
